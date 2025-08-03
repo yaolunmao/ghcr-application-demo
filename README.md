@@ -123,11 +123,19 @@ git push origin v1.0.0
 3. 首次部署需要正确配置 SSL 证书
 
 ```
-docker compose -f docker-compose.prod.yml run --rm certbot certonly --webroot --webroot-path /var/www/certbot -d ghcr.yaolm.top --email yaolunmao@gmail.com --agree-tos --no-eff-email --force-renewal
+docker compose -f docker-compose.prod.yml up -d
+
+docker compose -f docker-compose.prod.yml run --rm --entrypoint "\
+  certbot certonly --webroot -w /var/www/certbot \
+  --email yaolunmao@gmail.com \
+  -d ghcr.yaolm.top \
+  --rsa-key-size 4096 \
+  --agree-tos \
+  --force-renewal" ghcr-application-certbot
 ```
 
 ```
-docker compose -f docker-compose.prod.yml restart ghcr-application-vue3-prod
+docker compose -f docker-compose.prod.yml restart ghcr-application-vue3
 
 ```
 ## License

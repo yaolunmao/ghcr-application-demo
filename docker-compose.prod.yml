@@ -7,7 +7,7 @@ services:
   # 1. 前端 Nginx 服务
   ghcr-application-vue3:
     # 不再使用 build，而是直接从镜像仓库拉取镜像
-    image: ghcr.io/yaolunmao/ghcr-application-vue3:v1.0.0
+    image: ghcr.io/yaolunmao/ghcr-application-demo/ghcr-application-vue3:v1.0.2
     container_name: ghcr-application-vue3-prod # 修改容器名
     restart: always
     ports:
@@ -25,7 +25,7 @@ services:
   # 2. 后端 Fastify 服务
   ghcr-application-fastify:
     # 不再使用 build，而是直接从镜像仓库拉取镜像
-    image: ghcr.io/yaolunmao/ghcr-application-fastify:v1.0.0
+    image: ghcr.io/yaolunmao/ghcr-application-demo/ghcr-application-fastify:v1.0.2
     container_name: ghcr-application-fastify-prod # 修改容器名
     restart: always
     # 变化3：移除了 ports 块，不再暴露后端端口
