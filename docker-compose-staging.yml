@@ -1,0 +1,51 @@
+services:
+  # 后端 Fastify 服务
+  ghcr-application-fastify:
+    image: ghcr-application/fastify:staging  # <-- 添加此行
+    build:
+      context: ./ghcr-application-fastify # 构建上下文目录
+      dockerfile: Dockerfile # 使用生产环境的 Dockerfile
+    container_name: ghcr-application-fastify-staging # 容器名
+    ports:
+      - '5174:3000' # 后端不需要将端口映射到宿主机了 如果你需要调试可以取消注释这行
+    env_file:
+      - .env.pro
+    environment:     # 我们保留这个 environment 块，用于定义那些不是来自 .env 文件的变量
+      - DB_HOST=ghcr-application-mysql # 这个变量是跟Docker网络结构相关的，放在这里很合适
+    depends_on:
+      ghcr-application-mysql:
+        condition: service_healthy
+  # 前端 Vue3 服务
+  ghcr-application-vue3:
+    image: ghcr-application/fastify:vue3  # <-- 添加此行
+    build:
+      context: ./ghcr-application-vue3 # 构建上下文目录
+      dockerfile: Dockerfile # 使用生产环境的 Dockerfile
+      args:
+        # 明确告诉 Dockerfile，NGINX_CONF_FILE 的值是 nginx.staging.conf
+        - NGINX_CONF_FILE=nginx.staging.conf
+    container_name: ghcr-application-vue3-staging # 容器名
+    ports:
+      - '5173:80' # 将容器的nginx80端口映射到主机的5173端口
+    env_file:
+      - .env.pro
+    depends_on:
+      - ghcr-application-fastify # 确保后端服务先于前端启动
+  # MySQL 数据库服务
+  ghcr-application-mysql:
+    image: mysql:8.0.41
+    container_name: ghcr-application-mysql-staging
+    restart: always
+    env_file:
+      - .env.pro
+    volumes:
+      - mysql-staging-data:/var/lib/mysql # 持久化数据
+    ports:
+      - '5175:3306' # 之所以保留数据库端口映射是为了方便调试
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -p$$MYSQL_ROOT_PASSWORD"]
+      interval: 15s
+      timeout: 10s
+      retries: 60
+volumes:
+  mysql-staging-data:
