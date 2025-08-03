@@ -2,7 +2,7 @@
 
 该项目是一个完整的全栈应用示例，使用 GitHub Container Registry (GHCR) 进行镜像管理和部署。项目采用前后端分离架构，包含 Vue3 前端和 Fastify 后端。
 
-文档地址：https://blog.yaolm.top/2025/08/02/GHCR%E5%85%A8%E6%A0%88%E5%BA%94%E7%94%A8%E9%83%A8%E7%BD%B2%E6%A8%A1%E6%9D%BF/
+文档地址：https://blog.yaolm.top/2025/08/03/GHCR%E5%85%A8%E6%A0%88%E5%BA%94%E7%94%A8%E9%83%A8%E7%BD%B2%E6%A8%A1%E6%9D%BF/
 
 ## 技术栈
 
